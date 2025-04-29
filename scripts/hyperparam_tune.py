@@ -23,8 +23,7 @@ groups = df_sorted.groupby('city_name')
 def objective(trial):
     #hyperparameters
     
-    #epochs = trial.suggest_int('epochs', 80, 700)
-    epochs = 1
+    epochs = trial.suggest_int('epochs', 80, 700)
     hidden_size = trial.suggest_int('hidden_size', 25, 50)
     batch_size = trial.suggest_int('batch_size', 100, 512)
     model_name = trial.suggest_categorical('model_name', ['lstm', 'cnn_lstm'])
@@ -61,7 +60,7 @@ def objective(trial):
     return result_dict['f1_scores mean']
 
 study = optuna.create_study(direction='maximize')
-study.optimize(objective, n_trials=1)
+study.optimize(objective, n_trials=100)
 
 best_params = study.best_params
 best_score = study.best_value
