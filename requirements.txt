@@ -4,5 +4,4 @@ scipy
 seaborn
 matplotlib
 scikit-learn
-xgboost
 optuna

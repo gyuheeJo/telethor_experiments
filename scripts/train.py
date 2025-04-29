@@ -3,8 +3,14 @@ import lightning as L
 import torch 
 from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold
-from model import LightningLSTM, CNN_LSTM
 import numpy as np
+
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname("__file__"), '..')))
+from scripts.model import LightningLSTM, CNN_LSTM
+
 
 def test_model(X_test, y_test, model):
     with torch.no_grad():
@@ -42,7 +48,7 @@ def test_model(X_test, y_test, model):
                 roc_auc_score(y_test, y_pred), \
                 optimal_threshold
     
-def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3):
+def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3):
 
         inputs = torch.tensor(X_train, dtype=torch.float32)
         labels = torch.tensor(y_train, dtype=torch.float32)
@@ -50,9 +56,9 @@ def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size =
 
         dataset = TensorDataset(inputs, labels) 
         dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-        if model == 'lstm':
+        if model_name == 'lstm':
             model = LightningLSTM(X_train.shape[2], hidden_size=hidden_size, num_layers=num_layers, dropout = dropout, lr = lr)
-        elif model == 'cnn_lstm':
+        elif model_name == 'cnn_lstm':
             model = CNN_LSTM(X_train.shape[2], hidden_size=hidden_size, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr = lr)
         else:
             raise Exception
@@ -64,7 +70,7 @@ def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size =
         
 
 
-def lstm_torch_cv(X, y, epochs = 700, hidden_size = 32, batch_size=128, random_state=42, cv = 4, model = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3):
+def lstm_torch_cv(X, y, epochs = 700, hidden_size = 32, batch_size=128, random_state=42, cv = 4, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3):
 
     kfolds = StratifiedKFold(n_splits=cv, random_state=random_state, shuffle=True)
 
@@ -83,7 +89,7 @@ def lstm_torch_cv(X, y, epochs = 700, hidden_size = 32, batch_size=128, random_s
         y_train, y_val = y[train_index], y[test_index]
 
         accuracy, f1, precision, recall, auc, optimal_threshold = lstm_torch_train(
-                X_train, X_val, y_train, y_val, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model = model, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr = lr
+                X_train, X_val, y_train, y_val, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model_name = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr = lr
             )
         
         result_dict["accuracies"].append(accuracy)
