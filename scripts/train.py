@@ -48,7 +48,7 @@ def test_model(X_test, y_test, model):
                 roc_auc_score(y_test, y_pred), \
                 optimal_threshold
     
-def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3):
+def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3, return_model = False):
 
         inputs = torch.tensor(X_train, dtype=torch.float32)
         labels = torch.tensor(y_train, dtype=torch.float32)
@@ -65,6 +65,9 @@ def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size =
         trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=2)
 
         trainer.fit(model, train_dataloaders=dataloader)
+        
+        if return_model:
+            return test_model(X_val, y_val, model), model
 
         return test_model(X_val, y_val, model)
         
