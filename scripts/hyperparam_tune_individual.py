@@ -51,7 +51,7 @@ class Objective:
         #with timesteps
         X = scale(self.X, scale_method)
         X, y = ts_preprocess(X, self.y, n_steps)
-        X, y = balance(self.X, y)
+        X, y = balance(X, y)
 
         result_dict = lstm_torch_cv(self.X, self.y, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model_name = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
 
