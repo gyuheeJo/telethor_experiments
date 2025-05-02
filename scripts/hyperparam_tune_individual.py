@@ -53,7 +53,7 @@ class Objective:
         self.X, self.y = ts_preprocess(self.X, self.y, n_steps)
         self.X, self.y = balance(self.X, self.y)
 
-        result_dict = lstm_torch_cv(self.X, self.y, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
+        result_dict = lstm_torch_cv(self.X, self.y, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model_name = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
 
         return result_dict['f1_scores mean']
     

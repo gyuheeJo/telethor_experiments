@@ -55,7 +55,7 @@ def objective(trial):
     y_ts = np.concatenate(y_ts, axis=0)
 
 
-    result_dict = lstm_torch_cv(X_ts, y_ts, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
+    result_dict = lstm_torch_cv(X_ts, y_ts, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model_name = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
 
     return result_dict['f1_scores mean']
 
