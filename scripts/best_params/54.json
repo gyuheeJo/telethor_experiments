@@ -1,0 +1,16 @@
+{
+    "best_params": {
+        "epochs": 632,
+        "hidden_size": 33,
+        "batch_size": 384,
+        "model_name": "cnn_lstm",
+        "scale_method": "standard",
+        "num_layers": 3,
+        "dropout": 0.2,
+        "kernel_size": 3,
+        "num_cnn": 2,
+        "lr": 0.0009919075015938496,
+        "n_steps": 30
+    },
+    "best_score": 0.8119930105856902
+}
