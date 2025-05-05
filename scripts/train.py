@@ -1,7 +1,7 @@
 from torch.utils.data import TensorDataset, DataLoader
 import lightning as L
 import torch 
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, roc_auc_score
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, roc_auc_score, confusion_matrix
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
 
@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname("__file__"), '..'))
 from scripts.model import LightningLSTM, CNN_LSTM
 
 
-def test_model(X_test, y_test, model):
+def test_model(X_test, y_test, model, cf_mt = False):
     with torch.no_grad():
 
         y_pred = model(torch.tensor(X_test, dtype=torch.float32)).cpu().numpy()
@@ -41,14 +41,18 @@ def test_model(X_test, y_test, model):
         # print(y_test)
         # print(y_pred)
         # print(y_pred_)
-        return accuracy_score(y_test, y_pred), \
+        result = accuracy_score(y_test, y_pred), \
                 f1_score(y_test, y_pred), \
                 precision_score(y_test, y_pred), \
                 recall_score(y_test, y_pred), \
                 roc_auc_score(y_test, y_pred), \
                 optimal_threshold
+        if cf_mt:
+            cm = confusion_matrix(y_test, y_pred)
+            return result, cm
+        return result
     
-def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3, return_model = False):
+def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size = 32, batch_size=128, model_name = 'lstm', num_layers=2, dropout = 0.2, kernel_size = 3, num_cnn = 4, lr = 1e-3, return_model = False, cf_mt = False):
 
         inputs = torch.tensor(X_train, dtype=torch.float32)
         labels = torch.tensor(y_train, dtype=torch.float32)
@@ -67,9 +71,9 @@ def lstm_torch_train(X_train, X_val, y_train, y_val, epochs = 700, hidden_size =
         trainer.fit(model, train_dataloaders=dataloader)
         
         if return_model:
-            return test_model(X_val, y_val, model), model
+            return test_model(X_val, y_val, model, cf_mt), model
 
-        return test_model(X_val, y_val, model)
+        return test_model(X_val, y_val, model, cf_mt)
         
 
 
