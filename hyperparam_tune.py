@@ -6,8 +6,8 @@ import json
 from scripts.train import lstm_torch_cv
 
 dataframe = pd.concat([
-    pd.read_csv("../data/climate_data_54.csv"),
-    pd.read_csv("../data/climate_data_55.csv")
+    pd.read_csv("data/climate_data_54.csv"),
+    pd.read_csv("data/climate_data_55.csv")
 ], ignore_index=True)
 
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
@@ -57,7 +57,7 @@ def objective(trial):
 
     result_dict = lstm_torch_cv(X_ts, y_ts, epochs = epochs, hidden_size = hidden_size, batch_size=batch_size, model_name = model_name, num_layers=num_layers, dropout = dropout, kernel_size = kernel_size, num_cnn = num_cnn, lr =lr)
 
-    return result_dict['accuracy means']
+    return result_dict['aucs mean']
 
 study = optuna.create_study(direction='maximize')
 study.optimize(objective, n_trials=100)
