@@ -15,7 +15,6 @@ os.makedirs("trained_models", exist_ok=True)
 data_dirs = os.listdir("data")
 dfs = [pd.read_csv(f"data/{dir}") for dir in data_dirs]
 dataframe = pd.concat(dfs, ignore_index=True)
-dataframe.head()
 
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
 dataframe_fs = dataframe.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like'], axis=1)

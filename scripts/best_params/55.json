@@ -1,16 +1,16 @@
 {
     "best_params": {
-        "epochs": 361,
-        "hidden_size": 40,
-        "batch_size": 153,
+        "epochs": 516,
+        "hidden_size": 171,
+        "batch_size": 342,
         "model_name": "cnn_lstm",
         "scale_method": "standard",
-        "num_layers": 4,
+        "num_layers": 5,
         "dropout": 0.2,
-        "kernel_size": 4,
-        "num_cnn": 2,
-        "lr": 0.0032754478077300937,
-        "n_steps": 31
+        "kernel_size": 5,
+        "num_cnn": 6,
+        "lr": 0.0002875448265773001,
+        "n_steps": 27
     },
-    "best_score": 0.8040993347447104
+    "best_score": 0.799128882418192
 }
