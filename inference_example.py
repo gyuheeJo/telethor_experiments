@@ -5,10 +5,12 @@ import json
 from scripts.model import CNN_LSTM, LightningLSTM
 import torch
 
-dataframe = pd.read_csv('data/climate_data_54.csv')
+point = 57
+
+dataframe = pd.read_csv(f'data/climate_data_{point}.csv')
 
 #load hyper params
-with open(f'scripts/best_params/54_f1.json') as f:
+with open(f'scripts/best_params/{point}.json') as f:
     best = json.load(f)
 best = best['best_params']
 
@@ -41,7 +43,7 @@ elif best['model_name'] == 'lstm':
 else:
     raise Exception
 device = "cuda" if torch.cuda.is_available() else "cpu"
-checkpoint = torch.load('trained_models/54.pth',
+checkpoint = torch.load(f'trained_models/{point}.pth',
                         map_location=torch.device(device),
                         weights_only=True)
 
