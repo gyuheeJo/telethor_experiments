@@ -12,16 +12,20 @@ dataframe = pd.concat(dfs, ignore_index=True)
 dataframe.head()
 
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
-dataframe_fs = dataframe.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like'], axis=1)
+df_sorted_sorted = dataframe.sort_values(by=["city_name", "datetime"])
 
-df_sorted = dataframe_fs.sort_values(by=["city_name", "datetime"])
-groups = df_sorted.groupby('city_name')
+dataframe_fs = df_sorted_sorted.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like', 'rain_1h'], axis=1)
+dataframe_fs["datetime"] = dataframe_fs["datetime"].dt.hour
+print("Features used:")
+print(dataframe_fs.drop(['thunder', 'city_name'], axis=1).columns)
+
+groups = dataframe_fs.groupby('city_name')
 
 dataset_ts = {}
 
 for key, group in groups:
 
-    X = group.drop(['thunder', 'datetime', 'city_name'], axis=1)
+    X = group.drop(['thunder', 'city_name'], axis=1)
     y = group['thunder']
 
     X = X.to_numpy()
