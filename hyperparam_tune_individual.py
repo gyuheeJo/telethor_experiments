@@ -9,7 +9,9 @@ import os
 data_dirs = os.listdir("data")
 dfs = [pd.read_csv(f"data/{dir}") for dir in data_dirs]
 dataframe = pd.concat(dfs, ignore_index=True)
-dataframe.head()
+
+print("Puntos:")                                                                                                                                                                        
+print(dataframe["city_name"].unique())   
 
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
 df_sorted_sorted = dataframe.sort_values(by=["city_name", "datetime"])
