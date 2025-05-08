@@ -16,16 +16,15 @@ best = best['best_params']
 
 #convertimos a formato de datetime
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
+df_sorted = dataframe.sort_values(by=["datetime"])
 
 #quitamos las columnas redundantes
-dataframe_fs = dataframe.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like'], axis=1)
-
-#ordenamos por datetime
-df_sorted = dataframe_fs.sort_values(by=["datetime"])
+dataframe_fs = df_sorted.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like', 'rain_1h'], axis=1)
+dataframe_fs["datetime"] = dataframe_fs["datetime"].dt.hour
 
 #eliminamos columnas innecesarias para la predicción y seperamaos X y Y
-X = df_sorted.drop(['thunder', 'datetime', 'city_name'], axis=1).to_numpy()
-y = df_sorted['thunder'].to_numpy()
+X = dataframe_fs.drop(['thunder', 'city_name'], axis=1).to_numpy()
+y = dataframe_fs['thunder'].to_numpy()
 
 scale_method = best.pop('scale_method')
 n_steps = best.pop('n_steps')

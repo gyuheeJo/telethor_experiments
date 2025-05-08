@@ -14,9 +14,9 @@ print("Puntos:")
 print(dataframe["city_name"].unique())   
 
 dataframe["datetime"] = pd.to_datetime(dataframe["datetime"])
-df_sorted_sorted = dataframe.sort_values(by=["city_name", "datetime"])
+df_sorted = dataframe.sort_values(by=["city_name", "datetime"])
 
-dataframe_fs = df_sorted_sorted.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like', 'rain_1h'], axis=1)
+dataframe_fs = df_sorted.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like', 'rain_1h'], axis=1)
 dataframe_fs["datetime"] = dataframe_fs["datetime"].dt.hour
 print("Features used:")
 print(dataframe_fs.drop(['thunder', 'city_name'], axis=1).columns)
