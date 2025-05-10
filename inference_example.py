@@ -4,10 +4,12 @@ from scripts.preprocess import ts_preprocess, scale
 import json
 from scripts.model import CNN_LSTM, LightningLSTM
 import torch
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, roc_auc_score, confusion_matrix
 
 point = 57
 
-dataframe = pd.read_csv(f'data/climate_data_{point}.csv')
+dataframe = pd.read_csv(f'datos_prueba/datos_prueba.csv')
+dataframe = dataframe.loc[dataframe["city_name"] == point]
 
 #load hyper params
 with open(f'scripts/best_params/{point}.json') as f:
@@ -20,7 +22,10 @@ df_sorted = dataframe.sort_values(by=["datetime"])
 
 #quitamos las columnas redundantes
 dataframe_fs = df_sorted.drop(['thunder_count', 'temp_min', 'temp_max', 'feels_like', 'rain_1h'], axis=1)
+#solo tomamos la hora como entrada
 dataframe_fs["datetime"] = dataframe_fs["datetime"].dt.hour
+#con threshold de 0.5 convertimos a 0 y 1
+dataframe_fs["rain"] = (dataframe_fs['rain'] >= 0.5).astype(int)
 
 #eliminamos columnas innecesarias para la predicción y seperamaos X y Y
 X = dataframe_fs.drop(['thunder', 'city_name'], axis=1).to_numpy()
@@ -62,3 +67,14 @@ y_pred[ y_pred <= optimal_threshold] = 0
 print(f"preditions logits:\n{y_pred_logit[:30]}")
 print(f"preditions:\n{y_pred[:30].astype(np.int32)}")
 print(f"reals:\n{y[:30]}")
+
+result = accuracy_score(y_test, y_pred), \
+        f1_score(y_test, y_pred), \
+        precision_score(y_test, y_pred), \
+        recall_score(y_test, y_pred), \
+        roc_auc_score(y_test, y_pred), \
+        optimal_threshold
+cm = confusion_matrix(y_test, y_pred)
+
+print(result)
+print(cm)
