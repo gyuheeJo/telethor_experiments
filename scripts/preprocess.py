@@ -12,7 +12,7 @@ def scale(X, scaler_type = 'minmax'):
 
     return X
 
-def ts_preprocess(X, Y, n_steps = 30):
+def ts_preprocess(X, Y = None, n_steps = 30):
 
     X_processed = []
 
@@ -22,7 +22,9 @@ def ts_preprocess(X, Y, n_steps = 30):
 
         X_processed.append(x)
 
-    return np.array(X_processed), Y[n_steps-1:] 
+    if Y is not None:
+        return np.array(X_processed), Y[n_steps-1:] 
+    return np.array(X_processed)
 
 def balance(X, y):
     X_class_1 = X[y == 1]
